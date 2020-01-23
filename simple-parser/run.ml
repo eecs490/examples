@@ -40,9 +40,9 @@ let process (line : string) =
     Printf.printf "\n%s\n%!" (string_of_expr (Parser.main Lexer.token linebuf))
   with
   | Lexer.Error msg ->
-      Printf.fprintf stderr "%s%!" msg
+      Printf.fprintf stderr "%s\n%!" msg
   | Parser.Error ->
-      Printf.fprintf stderr "At offset %d: syntax error.\n%!" (Lexing.lexeme_start linebuf)
+      Printf.fprintf stderr "\nAt offset %d: syntax error.\n%!" (Lexing.lexeme_start linebuf)
 
 let process (optional_line : string option) =
   match optional_line with
