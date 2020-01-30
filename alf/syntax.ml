@@ -1,6 +1,6 @@
-type ty = 
+type ty =
     | Num
-    | Bool 
+    | Bool
     | Arrow of ty * ty
 
 type unop =
@@ -11,8 +11,8 @@ type binop =
     | OpLt
     | OpGt
     | OpEq
-    | OpPlus 
-    | OpMinus 
+    | OpPlus
+    | OpMinus
     | OpTimes
 
 type identifier = string
@@ -24,5 +24,5 @@ type expr =
     | EUnOp of unop * expr
     | EBinOp of expr * binop * expr
     | EIf of expr * expr * expr
-    | EFun of identifier * expr
-    | ELet of identifier * ty option * expr * expr
+    | EFun of identifier * ty * expr
+    | ELetAnn of identifier * ty * expr * expr

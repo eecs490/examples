@@ -5,8 +5,7 @@
 %token <string> VAR
 %token <bool> BOOLLIT
 %token IF THEN ELSE
-%token FUN
-%token LET OFTYPE BE IN
+%token FUN LET OFTYPE BE IN
 %token PLUS MINUS TIMES
 %token GT LT EQ
 %token LPAREN RPAREN
@@ -25,15 +24,13 @@ expr:
 | e = boolean
     { e }
 | LET v = var OFTYPE t = ty BE e1 = expr IN e2 = expr
-    { ELet (v, Some(t), e1, e2) }
-| LET v = var BE e1 = expr IN e2 = expr
-    { ELet (v, None, e1, e2) }
+    { ELetAnn (v, t, e1, e2) }
 | IF e1 = expr THEN e2 = expr ELSE e3 = expr
     { EIf (e1, e2, e3) }
-| FUN v = var ARROW e = expr
-    { EFun (v, e) }
+| FUN LPAREN v = var OFTYPE t = ty RPAREN ARROW e = expr
+    { EFun (v, ty, e) }
 
-boolean: 
+boolean:
 | e = arith
     { e }
 | e1 = arith GT e2 = arith
@@ -51,7 +48,7 @@ arith:
 | e1 = arith MINUS e2 = factor
     { EBinOp (e1, OpMinus, e2) }
 
-factor: 
+factor:
 | e = app
     { e }
 | e1 = factor TIMES e2 = app
@@ -74,7 +71,7 @@ simple:
     { EBoolLiteral b }
 | LPAREN e = expr RPAREN
     { e }
-    
+
 var:
 | v = VAR
     { v }
