@@ -1,45 +1,51 @@
-type ty = 
-    | Num
-    | Bool 
-    | Arrow of ty * ty
-    | Prod of ty * ty
-    | Unit
-    | Sum of ty * ty
-    | Void 
-    | TVar of identifier
-    | Rec of identifier * ty
+module Identifier = struct
+    type t = string
+end
 
-type unop =
-    | OpNeg
+module Typ = struct
+    type t = 
+        | Num
+        | Bool 
+        | Arrow of t * t
+        | Prod of t * t
+        | Unit
+        | Sum of t * t
+        | Void 
+        | TVar of identifier
+        | Rec of identifier * t
+end
 
-type binop =
-    | OpAp
-    | OpLt
-    | OpGt
-    | OpEq
-    | OpPlus 
-    | OpMinus 
-    | OpTimes
+module Exp = struct
+    type unop =
+        | OpNeg
 
-type identifier = string
+    type binop =
+        | OpAp
+        | OpLt
+        | OpGt
+        | OpEq
+        | OpPlus 
+        | OpMinus 
+        | OpTimes
 
-type expr =
-    | EVar of identifier
-    | ENumLiteral of int
-    | EBoolLiteral of bool
-    | EUnOp of unop * expr
-    | EBinOp of expr * binop * expr
-    | EIf of expr * expr * expr
-    | EFun of identifier * ty option * expr
-    | ELet of identifier * ty option * expr * expr
-    | EFix of identifier * ty option * expr
-    | EPair of expr * expr
-    | ETriv
-    | ELetPair of identifier * identifier * expr * expr
-    | EPrjL of expr
-    | EPrjR of expr
-    | EInjL of expr
-    | EInjR of expr
-    | ECase of expr * identifier * expr * identifier * expr
-    | ERoll of expr
-    | EUnroll of expr
+    type t =
+        | EVar of identifier
+        | ENumLiteral of int
+        | EBoolLiteral of bool
+        | EUnOp of unop * t
+        | EBinOp of t * binop * t
+        | EIf of t * t * t
+        | EFun of identifier * ty option * t
+        | ELet of identifier * ty option * t * t
+        | EFix of identifier * ty option * t
+        | EPair of t * t
+        | ETriv
+        | ELetPair of identifier * identifier * t * t
+        | EPrjL of t
+        | EPrjR of t
+        | EInjL of t
+        | EInjR of t
+        | ECase of t * identifier * t * identifier * t
+        | ERoll of t
+        | EUnroll of t
+end
