@@ -29,6 +29,10 @@ and token = parse
     { token lexbuf }
 | '\n'
     { EOL }
+| ".0"
+    { LPRJ }
+| ".1"
+    { RPRJ }
 | ['0'-'9']+ as i
     { INT (int_of_string i) }
 | '+'
@@ -65,6 +69,8 @@ and token = parse
     { R }
 | "case"
     { CASE }
+| "of"
+    { OF }
 | "roll"
     { ROLL }
 | "unroll"
@@ -95,8 +101,8 @@ and token = parse
     { NUM }
 | "Bool"
     { BOOL }
-| ['a'-'z']['a'-'z''A'-'Z''\'''0'-'9']* as v
-    { VAR (v) }
+| ['a'-'z']['a'-'z''A'-'Z''\'''0'-'9']* as i
+    { ID (i) }
 | _
     { raise (Error (Printf.sprintf "At offset %d: unexpected character.\n" (Lexing.lexeme_start lexbuf))) }
 

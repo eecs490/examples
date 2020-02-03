@@ -11,8 +11,8 @@ module Typ = struct
         | Unit
         | Sum of t * t
         | Void 
-        | TVar of identifier
-        | Rec of identifier * t
+        | TVar of Identifier.t
+        | Rec of Identifier.t * t
 end
 
 module Exp = struct
@@ -29,23 +29,23 @@ module Exp = struct
         | OpTimes
 
     type t =
-        | EVar of identifier
+        | EVar of Identifier.t
         | ENumLiteral of int
         | EBoolLiteral of bool
         | EUnOp of unop * t
         | EBinOp of t * binop * t
         | EIf of t * t * t
-        | EFun of identifier * ty option * t
-        | ELet of identifier * ty option * t * t
-        | EFix of identifier * ty option * t
+        | EFun of Identifier.t * Typ.t option * t
+        | ELet of Identifier.t * Typ.t option * t * t
+        | EFix of Identifier.t * Typ.t option * t
         | EPair of t * t
         | ETriv
-        | ELetPair of identifier * identifier * t * t
+        | ELetPair of Identifier.t * Identifier.t * t * t
         | EPrjL of t
         | EPrjR of t
         | EInjL of t
         | EInjR of t
-        | ECase of t * identifier * t * identifier * t
+        | ECase of t * Identifier.t * t * Identifier.t * t
         | ERoll of t
         | EUnroll of t
 end
