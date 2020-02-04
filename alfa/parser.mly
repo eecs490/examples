@@ -1,7 +1,7 @@
 %token NUM
 %token BOOL
 %token ARROW
-%token UNIT VOID 
+%token UNIT 
 %token DOT REC
 %token <int> INT
 %token <string> ID
@@ -116,7 +116,7 @@ ty:
     { t }
 | t1 = base_ty ARROW t2 = ty
     { Typ.Arrow (t1, t2) }
-| REC i = ID DOT t = ty
+| REC LPAREN i = ID DOT t = ty RPAREN
     { Typ.Rec(i, t) }
 
 ty_sum:
@@ -138,7 +138,5 @@ base_ty:
     { Typ.Bool }
 | UNIT
     { Typ.Unit }
-| VOID 
-    { Typ.Void }
 | t = id
     { Typ.TVar (t) }

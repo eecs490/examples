@@ -53,8 +53,6 @@ and token = parse
     { EQ }
 | "Unit"
     { UNIT }
-| "Void"
-    { VOID }
 | "Rec"
     { REC }
 | '.'

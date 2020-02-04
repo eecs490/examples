@@ -10,7 +10,6 @@ module Typ = struct
         | Prod of t * t
         | Unit
         | Sum of t * t
-        | Void 
         | TVar of Identifier.t
         | Rec of Identifier.t * t
 end
