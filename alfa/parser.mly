@@ -1,8 +1,7 @@
 %token NUM
 %token BOOL
 %token ARROW
-%token UNIT 
-%token DOT REC
+%token UNIT
 %token <int> INT
 %token <string> ID
 %token <bool> BOOLLIT
@@ -10,8 +9,7 @@
 %token FUN LET OFTYPE BE IN
 %token FIX COMMA
 %token L R LPRJ RPRJ
-%token CASE OF  
-%token ROLL UNROLL
+%token CASE OF
 %token PLUS MINUS TIMES
 %token GT LT EQ
 %token LPAREN RPAREN
@@ -43,10 +41,6 @@ expr:
     { Exp.EFun (i, Some(t), e) }
 | FIX i = id ARROW e = expr
     { Exp.EFun (i, None, e) }
-| UNROLL e = expr
-    { Exp.EUnroll (e) }
-| ROLL e = expr
-    { Exp.ERoll (e) }
 | L e = expr
     { Exp.EInjL (e) }
 | R e = expr
@@ -116,8 +110,6 @@ ty:
     { t }
 | t1 = base_ty ARROW t2 = ty
     { Typ.Arrow (t1, t2) }
-| REC LPAREN i = ID DOT t = ty RPAREN
-    { Typ.Rec(i, t) }
 
 ty_sum:
 | t = ty_prod
@@ -138,5 +130,3 @@ base_ty:
     { Typ.Bool }
 | UNIT
     { Typ.Unit }
-| t = id
-    { Typ.TVar (t) }

@@ -3,15 +3,13 @@ module Identifier = struct
 end
 
 module Typ = struct
-    type t = 
+    type t =
         | Num
-        | Bool 
+        | Bool
         | Arrow of t * t
         | Prod of t * t
         | Unit
         | Sum of t * t
-        | TVar of Identifier.t
-        | Rec of Identifier.t * t
 end
 
 module Exp = struct
@@ -23,8 +21,8 @@ module Exp = struct
         | OpLt
         | OpGt
         | OpEq
-        | OpPlus 
-        | OpMinus 
+        | OpPlus
+        | OpMinus
         | OpTimes
 
     type t =
@@ -45,6 +43,4 @@ module Exp = struct
         | EInjL of t
         | EInjR of t
         | ECase of t * Identifier.t * t * Identifier.t * t
-        | ERoll of t
-        | EUnroll of t
 end

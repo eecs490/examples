@@ -53,10 +53,6 @@ and token = parse
     { EQ }
 | "Unit"
     { UNIT }
-| "Rec"
-    { REC }
-| '.'
-    { DOT }
 | "fix"
     { FIX }
 | ','
@@ -69,10 +65,6 @@ and token = parse
     { CASE }
 | "of"
     { OF }
-| "roll"
-    { ROLL }
-| "unroll"
-    { UNROLL }
 | "if"
     { IF }
 | "then"
@@ -91,7 +83,7 @@ and token = parse
     { ARROW }
 | "fun"
     { FUN }
-| "True" 
+| "True"
     { BOOLLIT (true) }
 | "False"
     { BOOLLIT (false) }
