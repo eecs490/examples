@@ -45,7 +45,7 @@ expr:
     { Exp.EInjL (e) }
 | R e = expr
     { Exp.EInjR (e) }
-| CASE e1 = expr OF L LPAREN x = id RPAREN ARROW e2 = expr R LPAREN y = id RPAREN ARROW e3 = expr
+| CASE e1 = expr OF L LPAREN x = id RPAREN ARROW e2 = expr ELSE R LPAREN y = id RPAREN ARROW e3 = expr
     { Exp.ECase (e1, x, e2, y, e3)}
 | LET LPAREN x = id COMMA y = id RPAREN BE e1 = expr IN e2 = expr
     { Exp.ELetPair (x, y, e1, e2)}
