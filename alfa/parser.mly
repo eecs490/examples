@@ -38,9 +38,9 @@ expr:
 | FUN i = id ARROW e = expr
     { Exp.EFun (i, None, e) }
 | FIX LPAREN i = id OFTYPE t = ty RPAREN ARROW e = expr
-    { Exp.EFun (i, Some(t), e) }
+    { Exp.EFix (i, Some(t), e) }
 | FIX i = id ARROW e = expr
-    { Exp.EFun (i, None, e) }
+    { Exp.EFix (i, None, e) }
 | L e = expr
     { Exp.EInjL (e) }
 | R e = expr
