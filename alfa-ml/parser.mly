@@ -3,10 +3,10 @@
 %token ARROW
 %token UNIT
 %token <int> INT
-%token TICK
 %token REC DOT
 %token FORALLT
-%token <string> ID
+%token <string> EID
+%token <string> TID
 %token <bool> BOOLLIT
 %token IF THEN ELSE
 %token FUN LET OFTYPE BE IN
@@ -32,33 +32,33 @@ main:
 expr:
 | e = boolean
     { e }
-| LET i = id OFTYPE t = ty BE e1 = expr IN e2 = expr
+| LET i = eid OFTYPE t = ty BE e1 = expr IN e2 = expr
     { Exp.ELet (i, Some(t), e1, e2) }
-| LET i = id BE e1 = expr IN e2 = expr
+| LET i = eid BE e1 = expr IN e2 = expr
     { Exp.ELet (i, None, e1, e2) }
 | IF e1 = expr THEN e2 = expr ELSE e3 = expr
     { Exp.EIf (e1, e2, e3) }
-| FUN LPAREN i = id OFTYPE t = ty RPAREN ARROW e = expr
+| FUN LPAREN i = eid OFTYPE t = ty RPAREN ARROW e = expr
     { Exp.EFun (i, Some(t), e) }
-| FUN i = id ARROW e = expr
+| FUN i = eid ARROW e = expr
     { Exp.EFun (i, None, e) }
-| FIX LPAREN i = id OFTYPE t = ty RPAREN ARROW e = expr
+| FIX LPAREN i = eid OFTYPE t = ty RPAREN ARROW e = expr
     { Exp.EFix (i, Some(t), e) }
-| FIX i = id ARROW e = expr
+| FIX i = eid ARROW e = expr
     { Exp.EFix (i, None, e) }
 | L e = expr
     { Exp.EInjL (e) }
 | R e = expr
     { Exp.EInjR (e) }
-| CASE e1 = expr OF L LPAREN x = id RPAREN ARROW e2 = expr ELSE R LPAREN y = id RPAREN ARROW e3 = expr
+| CASE e1 = expr OF L LPAREN x = eid RPAREN ARROW e2 = expr ELSE R LPAREN y = eid RPAREN ARROW e3 = expr
     { Exp.ECase (e1, x, e2, y, e3) }
-| LET LPAREN x = id COMMA y = id RPAREN BE e1 = expr IN e2 = expr
+| LET LPAREN x = eid COMMA y = eid RPAREN BE e1 = expr IN e2 = expr
     { Exp.ELetPair (x, y, e1, e2) }
 | ROLL LPAREN e = expr RPAREN
     { Exp.ERoll (e) }
 | UNROLL LPAREN e = expr RPAREN
     { Exp.EUnroll (e) }
-| FORALL TICK t = id ARROW e = expr
+| FORALL t = tid ARROW e = expr
     { Exp.ETypFun (t, e) }
 
 
@@ -87,21 +87,25 @@ factor:
     { Exp.EBinOp (e1, Exp.OpTimes, e2) }
 
 app:
+| e = right
+    { e }
+| e1 = app e2 = right
+    { Exp.EBinOp (e1, OpAp, e2) }
+| MINUS e = right
+    { Exp.EUnOp (OpNeg, e) }
+
+right:
 | e = simple
     { e }
-| e1 = app e2 = simple
-    { Exp.EBinOp (e1, OpAp, e2) }
-| MINUS e = simple
-    { Exp.EUnOp (OpNeg, e) }
-| e = simple LPRJ
+| e = right LPRJ
     { Exp.EPrjL (e) }
-| e = simple RPRJ
+| e = right RPRJ
     { Exp.EPrjR (e) }
-| e = simple LSQUARE AT t = ty RSQUARE
+| e = right LSQUARE AT t = ty RSQUARE
     { Exp.ETypAp (e, t) }
 
 simple:
-| e = id
+| e = eid
     { Exp.EVar (e) }
 | i = INT
     { Exp.ENumLiteral i }
@@ -114,8 +118,8 @@ simple:
 | LPAREN e1 = expr COMMA e2 = expr RPAREN
     { Exp.EPair (e1, e2) }
 
-id:
-| i = ID
+eid:
+| i = EID
     { i }
 
 ty:
@@ -143,9 +147,13 @@ base_ty:
     { Typ.Bool }
 | UNIT
     { Typ.Unit }
-| TICK i = id
-    { Typ.Poly (i)}
-| REC LPAREN TICK i = id DOT t = ty RPAREN
+| i = tid
+    { Typ.TVar (i)}
+| REC LPAREN i = tid DOT t = ty RPAREN
     { Typ.Rec (i, t) }
-| FORALLT LPAREN TICK i = id DOT t = ty RPAREN
+| FORALLT LPAREN i = tid DOT t = ty RPAREN
     { Typ.Forall (i, t) }
+
+tid:
+| i = TID
+    { i }

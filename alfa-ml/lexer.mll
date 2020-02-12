@@ -57,8 +57,6 @@ and token = parse
     { FIX }
 | ','
     { COMMA }
-| '\''
-    { TICK }
 | "Rec"
     { REC }
 | "Forall"
@@ -111,8 +109,10 @@ and token = parse
     { NUM }
 | "Bool"
     { BOOL }
-| ['a'-'z']['a'-'z''A'-'Z''\'''0'-'9']* as i
-    { ID (i) }
+| ['\'']['a'-'z''_']['a'-'z''A'-'Z''\'''0'-'9''_']* as i
+    { TID (i) }
+| ['a'-'z''_']['a'-'z''A'-'Z''\'''0'-'9''_']* as i
+    { EID (i) }
 | _
     { raise (Error (Printf.sprintf "At offset %d: unexpected character.\n" (Lexing.lexeme_start lexbuf))) }
 
