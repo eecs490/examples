@@ -3,16 +3,16 @@ module Identifier = struct
 end
 
 module Typ = struct
-    type t =
-        | Num
-        | Bool
-        | Arrow of t * t
-        | Prod of t * t
-        | Unit
-        | Sum of t * t
-        | Poly of Identifier.t
-        | Rec of Identifier.t * t
-        | Forall of Identifier.t * t
+  type ('var, 'binding) p =
+    | TUnit | TBool | TNum
+    | TVar of 'var
+    | TRec of 'binding * ('var, 'binding) p
+    | TForall of 'binding * ('var, 'binding) p
+    | TProd of ('var, 'binding) p * ('var, 'binding) p
+    | TSum of ('var, 'binding) p * ('var, 'binding) p
+    | TArrow of ('var, 'binding) p * ('var, 'binding) p
+  (* types that use particular identifiers *)
+  type t = (Identifier.t, Identifier.t) p
 end
 
 module Exp = struct
@@ -51,3 +51,4 @@ module Exp = struct
         | ETypFun of Identifier.t * t
         | ETypAp of t * Typ.t
 end
+

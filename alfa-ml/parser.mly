@@ -126,33 +126,33 @@ ty:
 | t = ty_sum
     { t }
 | t1 = base_ty ARROW t2 = ty
-    { Typ.Arrow (t1, t2) }
+    { Typ.TArrow (t1, t2) }
 
 ty_sum:
 | t = ty_prod
     { t }
 | t1 = ty_sum PLUS t2 = ty_prod
-    { Typ.Sum (t1, t2) }
+    { Typ.TSum (t1, t2) }
 
 ty_prod:
 | t = base_ty
     { t }
 | t1 = ty_prod TIMES t2 = base_ty
-    { Typ.Prod (t1, t2) }
+    { Typ.TProd (t1, t2) }
 
 base_ty:
 | NUM
-    { Typ.Num }
+    { Typ.TNum }
 | BOOL
-    { Typ.Bool }
+    { Typ.TBool }
 | UNIT
-    { Typ.Unit }
+    { Typ.TUnit }
 | i = tid
     { Typ.TVar (i)}
 | REC LPAREN i = tid DOT t = ty RPAREN
-    { Typ.Rec (i, t) }
+    { Typ.TRec (i, t) }
 | FORALLT LPAREN i = tid DOT t = ty RPAREN
-    { Typ.Forall (i, t) }
+    { Typ.TForall (i, t) }
 
 tid:
 | i = TID
