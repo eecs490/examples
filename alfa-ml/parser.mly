@@ -149,6 +149,8 @@ base_ty:
     { Typ.TUnit }
 | i = tid
     { Typ.TVar (i)}
+| LPAREN t = ty RPAREN
+    { t }
 | REC LPAREN i = tid DOT t = ty RPAREN
     { Typ.TRec (i, t) }
 | FORALLT LPAREN i = tid DOT t = ty RPAREN
