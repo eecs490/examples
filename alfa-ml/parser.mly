@@ -125,19 +125,19 @@ eid:
 ty:
 | t = ty_sum
     { t }
-| t1 = base_ty ARROW t2 = ty
+| t1 = ty_sum ARROW t2 = ty
     { Typ.TArrow (t1, t2) }
 
 ty_sum:
 | t = ty_prod
     { t }
-| t1 = ty_sum PLUS t2 = ty_prod
+| t1 = ty_prod PLUS t2 = ty_sum
     { Typ.TSum (t1, t2) }
 
 ty_prod:
 | t = base_ty
     { t }
-| t1 = ty_prod TIMES t2 = base_ty
+| t1 = base_ty TIMES t2 = ty_prod
     { Typ.TProd (t1, t2) }
 
 base_ty:
