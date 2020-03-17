@@ -76,15 +76,19 @@ factor:
     { Exp.EBinOp (e1, Exp.OpTimes, e2) }
 
 app:
+| e = right
+    { e }
+| e1 = app e2 = right
+    { Exp.EBinOp (e1, OpAp, e2) }
+| MINUS e = right
+    { Exp.EUnOp (OpNeg, e) }
+
+right:
 | e = simple
     { e }
-| e1 = app e2 = simple
-    { Exp.EBinOp (e1, OpAp, e2) }
-| MINUS e = simple
-    { Exp.EUnOp (OpNeg, e) }
-| e = simple LPRJ
+| e = right LPRJ
     { Exp.EPrjL (e) }
-| e = simple RPRJ
+| e = right RPRJ   
     { Exp.EPrjR (e) }
 
 simple:
@@ -108,19 +112,19 @@ id:
 ty:
 | t = ty_sum
     { t }
-| t1 = base_ty ARROW t2 = ty
+| t1 = ty_sum ARROW t2 = ty
     { Typ.Arrow (t1, t2) }
 
 ty_sum:
 | t = ty_prod
     { t }
-| t1 = ty_sum PLUS t2 = ty_prod
+| t1 = ty_prod PLUS t2 = ty_sum
     { Typ.Sum (t1, t2) }
 
 ty_prod:
 | t = base_ty
     { t }
-| t1 = ty_prod TIMES t2 = base_ty
+| t1 = base_ty TIMES t2 = ty_prod
     { Typ.Prod (t1, t2) }
 
 base_ty:
