@@ -47,4 +47,5 @@ module Exp = struct
         | EAlloc of t
         | EDeref of t
         | EAssign of t * t
+        | ELoc of int
 end

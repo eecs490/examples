@@ -99,6 +99,8 @@ and token = parse
     { ASSIGN }
 | "ref"
     { REF }
+| '#'
+    { LOC }
 | ['a'-'z']['a'-'z''A'-'Z''\'''0'-'9']* as i
     { ID (i) }
 | _

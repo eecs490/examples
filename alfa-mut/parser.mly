@@ -11,7 +11,7 @@
 %token FIX COMMA
 %token L R LPRJ RPRJ
 %token CASE OF
-%token ALLOC BANG ASSIGN
+%token ALLOC BANG ASSIGN LOC
 %token PLUS MINUS TIMES
 %token GT LT EQ
 %token LPAREN RPAREN
@@ -89,6 +89,8 @@ app:
     { Exp.EUnOp (OpNeg, e) }
 | BANG e = right
     { Exp.EDeref (e) }
+| LOC i = INT
+    { Exp.ELoc (i) }
 
 right:
 | e = simple
