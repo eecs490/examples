@@ -97,6 +97,8 @@ and token = parse
     { BANG }
 | ":="
     { ASSIGN }
+| "ref"
+    { REF }
 | ['a'-'z']['a'-'z''A'-'Z''\'''0'-'9']* as i
     { ID (i) }
 | _

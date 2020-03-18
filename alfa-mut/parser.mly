@@ -2,6 +2,7 @@
 %token BOOL
 %token ARROW
 %token UNIT
+%token REF
 %token <int> INT
 %token <string> ID
 %token <bool> BOOLLIT
@@ -134,6 +135,10 @@ ty_prod:
     { Typ.Prod (t1, t2) }
 
 base_ty:
+| t = base_ty REF
+    { Typ.Ref (t) }
+| LPAREN t = ty RPAREN
+    { t }
 | NUM
     { Typ.Num }
 | BOOL
