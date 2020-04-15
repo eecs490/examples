@@ -2,6 +2,7 @@
 %token BOOL
 %token ARROW
 %token UNIT
+%token REF
 %token <int> INT
 %token <string> ID
 %token <bool> BOOLLIT
@@ -10,6 +11,7 @@
 %token FIX COMMA
 %token L R LPRJ RPRJ
 %token CASE OF
+%token ALLOC BANG ASSIGN LOC
 %token PLUS MINUS TIMES
 %token GT LT EQ
 %token LPAREN RPAREN
@@ -46,10 +48,13 @@ expr:
 | R e = expr
     { Exp.EInjR (e) }
 | CASE e1 = expr OF L LPAREN x = id RPAREN ARROW e2 = expr ELSE R LPAREN y = id RPAREN ARROW e3 = expr
-    { Exp.ECase (e1, x, e2, y, e3)}
+    { Exp.ECase (e1, x, e2, y, e3) }
 | LET LPAREN x = id COMMA y = id RPAREN BE e1 = expr IN e2 = expr
-    { Exp.ELetPair (x, y, e1, e2)}
-
+    { Exp.ELetPair (x, y, e1, e2) }
+| ALLOC LPAREN e = expr RPAREN
+    { Exp.EAlloc (e) }
+| e1 = boolean ASSIGN e2 = expr
+    { Exp.EAssign (e1, e2) }
 
 boolean:
 | e = arith
@@ -82,6 +87,10 @@ app:
     { Exp.EBinOp (e1, OpAp, e2) }
 | MINUS e = right
     { Exp.EUnOp (OpNeg, e) }
+| BANG e = right
+    { Exp.EDeref (e) }
+| LOC i = INT
+    { Exp.ELoc (i) }
 
 right:
 | e = simple
@@ -128,6 +137,10 @@ ty_prod:
     { Typ.Prod (t1, t2) }
 
 base_ty:
+| t = base_ty REF
+    { Typ.Ref (t) }
+| LPAREN t = ty RPAREN
+    { t }
 | NUM
     { Typ.Num }
 | BOOL
